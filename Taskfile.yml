@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  build:
+    desc: Сборка Docker-образов
+    cmds:
+      - docker compose build
+
+  run:
+    desc: Запуск контейнера go-app
+    cmds:
+      - docker compose up go-app

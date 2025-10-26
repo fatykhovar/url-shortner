@@ -1,0 +1,37 @@
+version: '1.0'
+
+services:
+  go-app:
+    container_name: go-app
+    image: fatykhreg/url-shortner:latest
+    build: .
+    command: ./wait-for-postgres.sh go-db ./url-shortner
+    environment:
+      DB_PASSWORD: root
+      CONFIG_PATH: ./config/prod.yaml
+    ports:
+      - "8082:8082"
+    depends_on:
+      - go-db
+    networks:    
+      - back-tier
+  go-db:
+    restart: always
+    container_name: go-db
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "8001:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:    
+      - back-tier
+
+volumes:  
+  pgdata: {}
+
+networks:
+  back-tier: {}
